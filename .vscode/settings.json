@@ -1,0 +1,45 @@
+{
+  "java.project.referencedLibraries": ["lib/**/*.jar"],
+  "deploy": {
+    "packages": [
+      {
+        "name": "frontend",
+        "description": "All files in webapp",
+        "files": [
+          "src/main/webapp/*",
+          "src/main/webapp/*/*",
+          "src/main/webapp/*.*",
+          "src/main/webapp/*/*.*",
+          "src/main/webapp/*/*/*.*",
+          "src/main/webapp/*/*/*/*.*",
+          "src/main/webapp/*/*/*/*/*.*",
+          "src/main/webapp/*/*/*/*/*",
+          "src/main/webapp/*/*/*/*/*/*.*"
+        ],
+        "exclude": ["src/main/webapp/test/*"],
+        "deployOnSave": true,
+        "useTargetList": true,
+        "button": {
+          "text": "Deploy",
+          "tooltip": "Click here to deploy frontend to hotsite",
+          "targets": ["HOTSITE"]
+        }
+      }
+    ],
+    "targets": [
+      {
+        "type": "local",
+        "name": "HOTSITE",
+        "description": "A local folder",
+        "dir": "target/DETE/",
+        "mappings": [
+          {
+            "source": "src/main/webapp",
+            "isRegEx": false,
+            "target": "/"
+          }
+        ]
+      }
+    ]
+  }
+}

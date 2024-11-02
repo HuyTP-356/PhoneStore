@@ -7,10 +7,70 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="PRJ301-Phone" default="default" basedir=".">
+<project name="PhoneStore" default="default" basedir=".">
+
+    <property name="src.dir" value="src"/>
+    <property name="build.classes.dir" value="build/classes"/>
+    <property name="build.generated.dir" value="build/generated-sources"/>
+    <property name="build.web.dir" value="build/web"/>
+
     <description>Builds, tests, and runs the project PRJ301-Phone.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <!-- Thêm thẻ path -->
+    <path id="project.classpath">
+        <pathelement location="lib/jakarta.servlet.jsp.jstl-3.0.1.jar"/>
+        <pathelement location="lib/jakarta.servlet.jsp.jstl-api-3.0.0.jar"/>
+        <pathelement location="lib/mssql-jdbc-12.8.1.jre11.jar"/>
+        <pathelement location="lib/jakarta.servlet-api-6.1.0.jar"/>
+        <!-- Thêm các thư viện khác nếu cần -->
+    </path>
+
+    <target name="copy-libs">
+        <mkdir dir="${build.web.dir}/WEB-INF/lib"/>
+        <copy todir="${build.web.dir}/WEB-INF/lib">
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="dist" depends="compile, copy-libs">
+        <mkdir dir="dist"/>
+        <copy todir="${build.web.dir}">
+            <fileset dir="web"/>
+        </copy>
+        <mkdir dir="${build.web.dir}/WEB-INF/classes"/>
+        <copy todir="${build.web.dir}/WEB-INF/classes">
+            <fileset dir="${build.classes.dir}"/>
+        </copy>
+        <war destfile="dist/PhoneStore.war" webxml="${build.web.dir}/WEB-INF/web.xml">
+            <fileset dir="${build.web.dir}"/>
+            <classes dir="build/classes"/>
+        </war>
+
+    </target>
+
+    <target name="compile" depends="-pre-compile">
+        <mkdir dir="${build.classes.dir}"/>
+        <javac destdir="${build.classes.dir}" source="22" target="22" includeantruntime="false">
+            <src path="${src.dir}"/>
+            <classpath>
+                <path refid="project.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <mkdir dir="${build.generated.dir}"/>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${build.generated.dir}"/>
+        </copy>
+    </target>
     <!--
+    
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 

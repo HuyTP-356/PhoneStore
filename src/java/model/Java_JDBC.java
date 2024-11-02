@@ -12,11 +12,12 @@ public class Java_JDBC {
         String dbPassword = "123";
         String port = "1433";
         String IP = "127.0.0.1";
-        String ServerName = "DESKTOP-UKLNCAK";
-        String DBName = "School";
+        String ServerName = "DESKTOP-B26N793\\HOANGCHAU";
+        String DBName = "PhoneStore";
         String driverClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
-        String dbURL = "jdbc:sqlserver://DESKTOP-UKLNCAK;databaseName=School;encrypt=false;trustServerCertificate=false;loginTimeout=30";
+        String dbURL = "jdbc:sqlserver://" + ServerName
+                + ";databaseName=" + DBName + ";encrypt=false;trustServerCertificate=false;loginTimeout=30";
 
         try {
             Class.forName(driverClass);
@@ -31,7 +32,9 @@ public class Java_JDBC {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM Products";
 
-        try ( Connection con = Java_JDBC.getConnectionWithSqlJdbc();  Statement stmt = con.createStatement();  ResultSet rs = stmt.executeQuery(query)) {
+        try (Connection con = Java_JDBC.getConnectionWithSqlJdbc();
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -56,12 +59,13 @@ public class Java_JDBC {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM Products WHERE name LIKE ? OR brand LIKE ?";
 
-        try ( Connection con = Java_JDBC.getConnectionWithSqlJdbc();  PreparedStatement pstmt = con.prepareStatement(query)) {
+        try (Connection con = Java_JDBC.getConnectionWithSqlJdbc();
+                PreparedStatement pstmt = con.prepareStatement(query)) {
 
             pstmt.setString(1, "%" + keyword + "%");
             pstmt.setString(2, "%" + keyword + "%");
 
-            try ( ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int id = rs.getInt("id");
                     String name = rs.getString("name");
@@ -84,7 +88,8 @@ public class Java_JDBC {
     public static void insertProduct(Product product) {
         String query = "INSERT INTO Products (name, brand, price, description, image_url) VALUES (?, ?, ?, ?, ?)";
 
-        try ( Connection con = Java_JDBC.getConnectionWithSqlJdbc();  PreparedStatement pstmt = con.prepareStatement(query)) {
+        try (Connection con = Java_JDBC.getConnectionWithSqlJdbc();
+                PreparedStatement pstmt = con.prepareStatement(query)) {
 
             pstmt.setString(1, product.getName());
             pstmt.setString(2, product.getBrand());
@@ -106,10 +111,11 @@ public class Java_JDBC {
         String query = "SELECT * FROM Products WHERE id = ?";
         Product product = null;
 
-        try ( Connection con = Java_JDBC.getConnectionWithSqlJdbc();  PreparedStatement pstmt = con.prepareStatement(query)) {
+        try (Connection con = Java_JDBC.getConnectionWithSqlJdbc();
+                PreparedStatement pstmt = con.prepareStatement(query)) {
 
             pstmt.setInt(1, id);
-            try ( ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String name = rs.getString("name");
                     String brand = rs.getString("brand");
